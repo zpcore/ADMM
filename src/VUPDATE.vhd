@@ -32,17 +32,18 @@ use ADMM_lib.ADMM_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity VUPDATE is
-    Port ( CLK : in  STD_LOGIC;
-           RST : in  STD_LOGIC;
-					 START : in STD_LOGIC;--NEWX_FIFO_RDY, NEWX and Z1 ready
-           RHO : in  STD_LOGIC_VECTOR (31 downto 0);
-           Z1 : in  STD_LOGIC_VECTOR (31 downto 0);
-           NEWX : in  STD_LOGIC_VECTOR (31 downto 0);--connect with relaxation fifo port
-           VREQUEST : out STD_LOGIC;--request v data from VVECTOR_CONTAINER
-					 V : in  STD_LOGIC_VECTOR (31 downto 0);--old v from VVECTOR_CONTAINER
-           NEWV : out  STD_LOGIC_VECTOR (31 downto 0);--to FORMULATEVECTOR & VVECTOR_CONTAINER
-					 V_DONE : out STD_LOGIC;--new v complete & Z1 ready, start signal for -f vector formulate
-					 START_ZFIFO_RD : out STD_LOGIC);--to ZVECTOR_CONTAINER fifo read
+	Port ( 
+		CLK : in  STD_LOGIC;
+		RST : in  STD_LOGIC;
+		START : in STD_LOGIC;--NEWX_FIFO_RDY, NEWX and Z1 ready
+		RHO : in  STD_LOGIC_VECTOR (31 downto 0);
+		Z1 : in  STD_LOGIC_VECTOR (31 downto 0);
+		NEWX : in  STD_LOGIC_VECTOR (31 downto 0);--connect with relaxation fifo port
+		VREQUEST : out STD_LOGIC;--request v data from VVECTOR_CONTAINER
+		V : in  STD_LOGIC_VECTOR (31 downto 0);--old v from VVECTOR_CONTAINER
+		NEWV : out  STD_LOGIC_VECTOR (31 downto 0);--to FORMULATEVECTOR & VVECTOR_CONTAINER
+		V_DONE : out STD_LOGIC;--new v complete & Z1 ready, start signal for -f vector formulate
+		START_ZFIFO_RD : out STD_LOGIC);--to ZVECTOR_CONTAINER fifo read
 end VUPDATE;
 
 architecture Behavioral of VUPDATE is

@@ -32,18 +32,19 @@ library ADMM_lib;
 use ADMM_lib.ADMM_pkg.all;
 
 entity outputArrangement is
-	 Port ( clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC;		  
-           mergeIn_TOP : in  STD_LOGIC_VECTOR (31 downto 0);
-           mergeIn_BOT : in  STD_LOGIC_VECTOR (31 downto 0);
-           MergeIn_EN : in  STD_LOGIC;----signal that Merge result is ready in the port			  
-           reduceIn : in  STD_LOGIC_VECTOR (31 downto 0);
-           ReduceIn_EN : in  STD_LOGIC;----signal that Reduction result is ready in the port		  
-			     FULL : out	STD_LOGIC;
-           EMPTY : out  STD_LOGIC; 
-           RD_EN : in  STD_LOGIC;
-           dataOut : out  STD_LOGIC_VECTOR (31 downto 0);		  
-           exception : out EXCEPTION_type);
+	 Port ( 
+		clk : in  STD_LOGIC;
+		rst : in  STD_LOGIC;		  
+		mergeIn_TOP : in  STD_LOGIC_VECTOR (31 downto 0);
+		mergeIn_BOT : in  STD_LOGIC_VECTOR (31 downto 0);
+		MergeIn_EN : in  STD_LOGIC;----signal that Merge result is ready in the port			  
+		reduceIn : in  STD_LOGIC_VECTOR (31 downto 0);
+		ReduceIn_EN : in  STD_LOGIC;----signal that Reduction result is ready in the port		  
+		FULL : out	STD_LOGIC;
+		EMPTY : out  STD_LOGIC; 
+		RD_EN : in  STD_LOGIC;
+		dataOut : out  STD_LOGIC_VECTOR (31 downto 0);		  
+		exception : out EXCEPTION_type);
 			  
 end outputArrangement;
 
@@ -152,15 +153,15 @@ FIFO_ReductionOut_temp_model: MVM_FIFO
 
 Merge_FIFO_model: FIFO_2PORTs_Merge 
   Port map( 
-    clk 		=> clk,
-    rst     => rst,
-    wr_en     => MergeIn_EN,
-    rd_en     => rd_en_M,
-    full 		=> Merge_FIFO_full,
-    dina 		=> mergeIn_TOP,
-    dinb 		=> mergeIn_BOT,
-    douta 		=> Merge_FIFO_out(0),
-    doutb 		=> Merge_FIFO_out(1));
+    clk  => clk,
+    rst => rst,
+    wr_en => MergeIn_EN,
+    rd_en => rd_en_M,
+    full => Merge_FIFO_full,
+    dina => mergeIn_TOP,
+    dinb => mergeIn_BOT,
+    douta => Merge_FIFO_out(0),
+    doutb => Merge_FIFO_out(1));
 			  
 FIFO_finalOutput_model: MVM_FIFO
   PORT MAP (

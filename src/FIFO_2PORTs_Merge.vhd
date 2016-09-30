@@ -32,15 +32,16 @@ library ADMM_lib;
 use ADMM_lib.ADMM_pkg.all;
 
 entity FIFO_2PORTs_Merge is
-    Port ( clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC;
-           wr_en : in  STD_LOGIC;
-           rd_en : in  STD_LOGIC;
-			     full : out STD_LOGIC;
-           dina : in  STD_LOGIC_VECTOR (31 downto 0);
-           dinb : in  STD_LOGIC_VECTOR (31 downto 0);
-           douta : out  STD_LOGIC_VECTOR (31 downto 0);
-           doutb : out  STD_LOGIC_VECTOR (31 downto 0));
+    Port ( 
+		clk : in  STD_LOGIC;
+		rst : in  STD_LOGIC;
+		wr_en : in  STD_LOGIC;
+		rd_en : in  STD_LOGIC;
+		full : out STD_LOGIC;
+		dina : in  STD_LOGIC_VECTOR (31 downto 0);
+		dinb : in  STD_LOGIC_VECTOR (31 downto 0);
+		douta : out  STD_LOGIC_VECTOR (31 downto 0);
+		doutb : out  STD_LOGIC_VECTOR (31 downto 0));
 end FIFO_2PORTs_Merge;
 
 architecture Behavioral of FIFO_2PORTs_Merge is
@@ -66,27 +67,27 @@ begin
 full <= fulla or fullb;
 
 U_TOP : MVM_FIFO
-  PORT MAP (
-    clk => clk,
-    srst => rst,
-    din => dina,
-    wr_en => wr_en,
-    rd_en => rd_en,
-    dout => douta,
-    full => fulla
---  empty => empty
+	PORT MAP (
+		clk => clk,
+		srst => rst,
+		din => dina,
+		wr_en => wr_en,
+		rd_en => rd_en,
+		dout => douta,
+		full => fulla
+--		empty => empty
   );
   
 U_BOT : MVM_FIFO
-  PORT MAP (
-    clk => clk,
-    srst => rst,
-    din => dinb,
-    wr_en => wr_en,
-    rd_en => rd_en,
-    dout => doutb,
-	 full => fullb
---    empty => empty
+	PORT MAP (
+		clk => clk,
+		srst => rst,
+		din => dinb,
+		wr_en => wr_en,
+		rd_en => rd_en,
+		dout => doutb,
+		full => fullb
+--		empty => empty
   );
 end Behavioral;
 

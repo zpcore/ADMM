@@ -96,15 +96,15 @@ Gen_Mini_Reduction:
 for I in 0 to REDUCTION_ADDER-1 generate	
 Mini_Reduction_Model : Mini_Reduction
 	Port map( 
-					clk			=> clk, 
-					rst 			=> rst,	
-					reduce_pre  =>	reduce_pre(I),
-					READY     	=>	DONE(I),
-					reduce_pos 	=>	reduce_pre(I+1),
-					dataInput 	=> RRes(I),
-					dataOutput 	=> RRes(I+1),
-					DONE     	=> DONE(I+1)
-			  );
+		clk			=> clk, 
+		rst 			=> rst,	
+		reduce_pre  =>	reduce_pre(I),
+		READY     	=>	DONE(I),
+		reduce_pos 	=>	reduce_pre(I+1),
+		dataInput 	=> RRes(I),
+		dataOutput 	=> RRes(I+1),
+		DONE     	=> DONE(I+1)
+	);
 end generate Gen_Mini_Reduction;
 
 end Behavioral;

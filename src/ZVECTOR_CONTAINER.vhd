@@ -33,19 +33,20 @@ use ADMM_lib.ADMM_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity ZVECTOR_CONTAINER is
-    Port ( CLK : in  STD_LOGIC;
-           RST : in  STD_LOGIC;
-					 LOOP_DONE : in STD_LOGIC;
-					 -----------------------------------------
-           SAT_DONE : in  STD_LOGIC;--done signal from saturation
-					 REDUCE_READ : in STD_LOGIC; --read signal from reduce circuit
-           SAT_DIN : in  STD_LOGIC_VECTOR (31 downto 0);
-					 Z1_PUSHING : out STD_LOGIC;--one clk later start pushing Z1
-           Z0 : out  STD_LOGIC_VECTOR (31 downto 0);
-           Z1 : out  STD_LOGIC_VECTOR (31 downto 0);
-					 STARTFORMVECTOR : in STD_LOGIC;--one clk latet start pushing Z1_FORMVECTOR
-					 --connect with START_ZFIFO_RD in VUPDATE
-					 Z1_FORMVECTOR : out STD_LOGIC_VECTOR(31 downto 0));
+	Port ( 
+		CLK : in  STD_LOGIC;
+		RST : in  STD_LOGIC;
+		LOOP_DONE : in STD_LOGIC;
+		-----------------------------------------
+		SAT_DONE : in  STD_LOGIC;--done signal from saturation
+		REDUCE_READ : in STD_LOGIC; --read signal from reduce circuit
+		SAT_DIN : in  STD_LOGIC_VECTOR (31 downto 0);
+		Z1_PUSHING : out STD_LOGIC;--one clk later start pushing Z1
+		Z0 : out  STD_LOGIC_VECTOR (31 downto 0);
+		Z1 : out  STD_LOGIC_VECTOR (31 downto 0);
+		STARTFORMVECTOR : in STD_LOGIC;--one clk latet start pushing Z1_FORMVECTOR
+		--connect with START_ZFIFO_RD in VUPDATE
+		Z1_FORMVECTOR : out STD_LOGIC_VECTOR(31 downto 0));
 end ZVECTOR_CONTAINER;
 
 architecture Behavioral of ZVECTOR_CONTAINER is
@@ -76,22 +77,53 @@ signal Z1_reg : STD_LOGIC_VECTOR (31 downto 0);
 
 begin
 
+--writeAddress : process(CLK, RST)
+--begin
+--	if(CLK='1' and CLK' event)then
+--		if(RST='1')then
+--			addra <= (others => '0');
+--			addrb <= (others => '0');
+--		else
+--			if(REDUCE_READ = '1')then
+--				addrb <= std_logic_vector(unsigned(addrb)+1);
+--				if(unsigned(addrb)=S1-1)then
+--					addrb <= (others=>'0');
+--				end if;
+--			end if;
+--			if(SAT_DONE = '1')then
+--				addra <= std_logic_vector(unsigned(addra)+1);
+--				if(unsigned(addra)=S1-1)then
+--					addra <= (others=>'0');
+--				end if;
+--			end if;
+--		end if;
+--	end if;
+--end process;
+
+--for simulation, modelsim bram 0 address bug. 
 writeAddress : process(CLK, RST)
 begin
 	if(CLK='1' and CLK' event)then
-		if(RST='1' or LOOP_DONE='1')then
-			addra <= (others => '0');
-			addrb <= (others => '0');
+		if(RST='1')then
+			addra <= std_logic_vector(to_unsigned(1,addra' length));
+			addrb <= std_logic_vector(to_unsigned(1,addrb' length));
 		else
 			if(REDUCE_READ = '1')then
 				addrb <= std_logic_vector(unsigned(addrb)+1);
+				if(unsigned(addrb)=S1)then
+					addrb <= std_logic_vector(to_unsigned(1,addrb' length));
+				end if;
 			end if;
 			if(SAT_DONE = '1')then
 				addra <= std_logic_vector(unsigned(addra)+1);
+				if(unsigned(addra)=S1)then
+					addra <= std_logic_vector(to_unsigned(1,addra' length));
+				end if;
 			end if;
 		end if;
 	end if;
 end process;
+
 
 Z1Delay : process(CLK, RST)
 begin
@@ -123,11 +155,11 @@ U_zvector : ZVECTOR
 UFIFO_Z1 : FIFO_Z1
 	Port map( 
 		CLK => CLK,
-    RST => RST,
-    WR => SAT_DONE,
-    RD => STARTFORMVECTOR,
-    DIN => SAT_DIN,
-    DOUT => Z1_FORMVECTOR);
+		RST => RST,
+		WR => SAT_DONE,
+		RD => STARTFORMVECTOR,
+		DIN => SAT_DIN,
+		DOUT => Z1_FORMVECTOR);
 
 end Behavioral;
 

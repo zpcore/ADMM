@@ -47,6 +47,7 @@ entity BRAM_WRAPPER is
 		dataInput : out K2by32_type;
 		dataOutputRdy : out STD_LOGIC;
 		LOOP_DONE : out STD_LOGIC;
+		iterationCount : in STD_LOGIC_VECTOR(13 downto 0);
 		systemState_rd : out STD_LOGIC;
 		START_NEW_LOOP : in STD_LOGIC;--start push matrix and vector to MVM binary tree
 		START : in STD_LOGIC;--Finish storing matrix data into BRAM 
@@ -56,7 +57,7 @@ end BRAM_WRAPPER;
 
 architecture Behavioral of BRAM_WRAPPER is
 
-type ctrl_type is (idel,wt_start,running,start_output,BRAM_init,vector_wr,state_wr);
+type ctrl_type is (idle,wt_start,running,start_output,BRAM_init,vector_wr,state_wr);
 signal ps_ctrl : ctrl_type;
 signal ns_ctrl : ctrl_type;
 signal addrb_wr : std_logic_vector(TOPBRAMADDR_WIDTH-1 downto 0);
@@ -81,6 +82,7 @@ signal fifo_rd_dly : std_logic;
 signal fifo_rd : std_logic;
 signal fifo_out : std_logic_vector(31 downto 0);
 signal stateWrComplete : std_logic;
+
 
 --simulation signal
 signal dataInput_sim0 : std_logic_vector(31 downto 0);
@@ -113,7 +115,7 @@ state_update : process(clk, rst)
 begin
 	if(clk = '1' and clk' event)then
 		if(rst = '1')then
-			ps_ctrl <= idel;
+			ps_ctrl <= idle;
 		else
 			ps_ctrl <= ns_ctrl;
 		end if;
@@ -123,16 +125,16 @@ end process;
 comb_state_update : process(rst, ps_ctrl, vectorComplete, ConfigSTATE, START_NEW_LOOP, START, output_complete, stateWrComplete)
 begin
 	if(rst= '1')then
-		ns_ctrl <= idel;
+		ns_ctrl <= idle;
 	else
 		ns_ctrl <= ps_ctrl;
 		case ps_ctrl is
-			when idel =>
+			when idle =>
 				if(ConfigSTATE=BRAM_init)then
 					ns_ctrl <= BRAM_init;
 				end if;
 			when BRAM_init =>
-				if(START='1')then
+				if(ConfigSTATE=running)then
 					ns_ctrl <= wt_start;
 				end if;
 			when wt_start=>
@@ -158,15 +160,14 @@ begin
 	end if;
 end process;
 
-RemuForever : process(CLK, RST)--without this, programme will never run
+RemuForever : process(CLK, RST)--without this, programme will die
 begin
 	if(CLK='1' and CLK' event)then
 		if(RST='1')then
 			LOOP_DONE <= '0';
 		else
 			LOOP_DONE <= '0';
---			if(ps_ctrl=start_output)then
-			if(START='1' or stateWrComplete='1')then
+			if(stateWrComplete ='1')then
 				LOOP_DONE <='1';
 			end if;
 		end if;
@@ -289,15 +290,15 @@ F_signal_dly : signal_dly
 	Generic map( LATENCY => 1)
 	Port map(clk,rst,systemState_rd_signal,systemState_rd_signal_dly);	
 
-systemState_rd <= systemState_rd_signal;
+systemState_rd <= systemState_rd_signal when unsigned(iterationCount)= 0 else '0';
 
 weaHold: for I in 0 to K-1 generate
-	wea(I) <= "1" when (WEBRAM = '1' and unsigned(NumBRAM) = I) else "0";
+	wea(I) <= "1" when (WEBRAM = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
 end generate weaHold;
 
 
 webHold: for I in 0 to K-1 generate
-	web(I) <= "1" when ((fifo_rd_dly = '1' or systemState_rd_signal_dly ='1') and unsigned(BRAMCount) = I) else "0";
+	web(I) <= "1" when ((fifo_rd_dly = '1' or (systemState_rd_signal_dly ='1' and unsigned(iterationCount)= 0)) and unsigned(BRAMCount) = I) else "0";
 end generate webHold;
 
 addra <= ADDR when (ps_ctrl=BRAM_init) else addra_output;
@@ -324,16 +325,16 @@ for I in 0 to K-1 generate
 end generate Gen_MVMBRAM;
 
 Ufifo_vector : fifo_vector
-  PORT MAP (
-    clk => CLK,
-    srst => RST,
-    din => V_IN,
-    wr_en => DATA_RDY,
-    rd_en => fifo_rd,
-    dout => fifo_out,
-    full => full,
-    empty => empty
-  );
+	PORT MAP (
+		clk => CLK,
+		srst => RST,
+		din => V_IN,
+		wr_en => DATA_RDY,
+		rd_en => fifo_rd,
+		dout => fifo_out,
+		full => full,
+		empty => empty
+		);
 
 
 end Behavioral;

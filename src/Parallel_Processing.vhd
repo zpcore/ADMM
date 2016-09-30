@@ -46,13 +46,13 @@ end Parallel_Processing;
 
 architecture Behavioral of Parallel_Processing is
 
-signal mulRes : Kby32_type;
+--signal mulRes : Kby32_type;
 signal RS : RouteSig;
 signal mulIn : K2by32_type;
 
 signal rd_en : std_logic;
 signal wr_en : std_logic;
-signal Merge_FIFO_full : std_logic;
+--signal Merge_FIFO_full : std_logic;
 signal reductionOut : std_logic_vector(31 downto 0);
 signal pre_finishReduce : std_logic;
 signal FULL : std_logic;
@@ -137,30 +137,31 @@ Final_Adder_Ready_Output : signal_dly
 
 
 Arrangement_model : outputArrangement
-	 Port Map( clk 				=>	clk,
-           rst 					=>	rst,
-           mergeIn_TOP			=>	RS(0,COMPLEVEL-1),
-           mergeIn_BOT 			=>	RS(1,COMPLEVEL-1),
-           MergeIn_EN 			=> wr_en,
-           reduceIn				=>	reductionOut,
-           ReduceIn_EN 			=>	ReduceIn_EN,
-					 FULL					=>	FULL,
-           EMPTY 					=>	EMPTY,
-           RD_EN		 			=>	RD_Out,
-           dataOut 				=>	resOut,
-					 exception 			=> exception_DataStorage);
+	Port Map( 
+		clk => clk,
+		rst => rst,
+		mergeIn_TOP => RS(0,COMPLEVEL-1),
+		mergeIn_BOT => RS(1,COMPLEVEL-1),
+		MergeIn_EN => wr_en,
+		reduceIn => reductionOut,
+		ReduceIn_EN => ReduceIn_EN,
+		FULL => FULL,
+		EMPTY => EMPTY,
+		RD_EN => RD_Out,
+		dataOut => resOut,
+		exception => exception_DataStorage);
 		  			  
 Reduction_Circuit_Model : Reduction_Circuit
 	Port Map(
-				clk 					=> clk,
-				rst 					=> rst,
-				din 					=> RS(0,COMPLEVEL),
-				dout 					=>	reductionOut,
-				reduce 				=> pre_finishReduce,
-				READY 				=> Final_Adder_Ready,
-				COMPLETE 			=> ReduceIn_EN,
-				EXCEPTION 			=> exception_Reduction_Circuit
-				);
+		clk => clk,
+		rst => rst,
+		din => RS(0,COMPLEVEL),
+		dout => reductionOut,
+		reduce => pre_finishReduce,
+		READY => Final_Adder_Ready,
+		COMPLETE => ReduceIn_EN,
+		EXCEPTION => exception_Reduction_Circuit
+		);
 		  
 end Behavioral;
 
