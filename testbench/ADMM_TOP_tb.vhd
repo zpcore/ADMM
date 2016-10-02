@@ -21,20 +21,21 @@ component ADMM_TOP is
 		RST : in  STD_LOGIC;
 		NumBRAM : in STD_LOGIC_VECTOR(31 downto 0);
 		ADDRBRAM : in STD_LOGIC_VECTOR(31 downto 0);
-		WEBRAM : in STD_LOGIC;
+		WRBRAM : in STD_LOGIC;
 		MATData : in STD_LOGIC_VECTOR(31 downto 0);
 		ConfigSTATE : in state_type;
-		START : in STD_LOGIC;--start computation signal, after BRAMInit state
+--		START : in STD_LOGIC;--start computation signal, after BRAMInit state
 		RHO : in STD_LOGIC_VECTOR(31 downto 0);
 		ALPHA : in STD_LOGIC_VECTOR(31 downto 0);
 		ONEMINUSALPHA : in STD_LOGIC_VECTOR(31 downto 0);
 		U : out Mby32_type;
+		STATE_RD : out STD_LOGIC;
 		X : in STD_LOGIC_VECTOR(31 downto 0);--signal from sensor, serial input(x0,x1,...xN)
 --below signal for simulation
 		BOX : in STD_LOGIC_VECTOR(31 downto 0);
 		BOX_REQUEST : out STD_LOGIC;
 		QR : in STD_LOGIC_VECTOR(31 downto 0);
-		TRAJ_REQUEST : out STD_LOGIC
+		NEW_QR_RDY : in STD_LOGIC
 );
 end component;
 
@@ -43,18 +44,19 @@ signal CLK : std_logic := '0';
 signal RST : std_logic := '0';
 signal NumBRAM : std_logic_vector(31 downto 0) := (others=>'0');
 signal ADDRBRAM : std_logic_vector(31 downto 0) := (others=>'0');
-signal WEBRAM : std_logic := '0';
+signal WRBRAM : std_logic := '0';
 signal MATData : std_logic_vector(31 downto 0) := (others=> '0');
-signal ConfigSTATE : state_type := idel;
-signal START : std_logic := '0';
+signal ConfigSTATE : state_type := idle;
+--signal START : std_logic := '0';
 signal RHO : std_logic_vector(31 downto 0) := (others=>'0');
 signal ALPHA : std_logic_vector(31 downto 0) := (others=>'0');
 signal ONEMINUSALPHA : std_logic_vector(31 downto 0) := (others=>'0');
 signal BOX : std_logic_vector(31 downto 0) := (others=>'0');
 signal BOX_REQUEST : std_logic := '0';
 signal QR : std_logic_vector(31 downto 0) := (others=>'0');
-signal TRAJ_REQUEST : std_logic := '0';
-signal X : std_logic_vector(31 downto 0);
+signal NEW_QR_RDY : std_logic := '0';
+signal X : std_logic_vector(31 downto 0):=(others=>'0');
+signal STATE_RD : std_logic:='0';
 
 --Outputs
 signal U : Mby32_type;
@@ -70,20 +72,20 @@ uut: ADMM_TOP PORT MAP (
 	RST =>RST,
 	NumBRAM =>NumBRAM,
 	ADDRBRAM =>ADDRBRAM,
-	WEBRAM =>WEBRAM,
+	WRBRAM =>WRBRAM,
 	MATData =>MATData,
 	ConfigSTATE =>ConfigSTATE,
-	START =>START,
 	RHO =>RHO,
 	ALPHA =>ALPHA,
 	ONEMINUSALPHA =>ONEMINUSALPHA,
 	U =>U,
+	STATE_RD => STATE_RD,
 	X => X,
 	--below signal for simulation
 	BOX =>BOX,
 	BOX_REQUEST =>BOX_REQUEST,
 	QR =>QR,
-	TRAJ_REQUEST =>TRAJ_REQUEST
+	NEW_QR_RDY =>NEW_QR_RDY
 	);
 
    -- Clock process definitions
@@ -98,7 +100,6 @@ end process;
 boxQR: process
 begin		
 	BOX <= x"425c0000";--55
-	QR <= x"3f800000";
 	X <= x"3F800000";
 	wait;
 end process;
@@ -108,215 +109,215 @@ stim_proc: process
 begin		
 	-- hold reset state for 100 ns.
 	RST <= '1';
-	wait for 105 ns;	
-  RST <= '0';
+	wait for 105.1 ns;	
+  	RST <= '0';
 	ALPHA <= x"3FC00000";--1.5
-	ONEMINUSALPHA <= x"3F000000";--0.5
+	ONEMINUSALPHA <= x"BF000000";-- -0.5
 	RHO <= x"3F666666";--0.9
+	QR <= x"00000000";
 	wait for CLK_period*10;
 	ConfigSTATE <= BRAM_init;
 
 	wait for CLK_period;
-	WEBRAM <= '1';
+	WRBRAM <= '1';
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"40be69d4";
+	MATData <= x"4085f20e";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"4112da41";
+	MATData <= x"3fe025a0";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"4008ec0b";
+	MATData <= x"410fc3a8";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"4112c029";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"410fb7b7";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"408f309a";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"407ae069";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"00000000";
+	MATData <= x"40ee0af0";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"4081d537";
+	MATData <= x"406a8bcb";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"3fdacb27";
+	MATData <= x"41149a27";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"40efc86d";
+	MATData <= x"40889e70";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"40d89efc";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"41125959";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"403a58b1";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"409952f8";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"41063bf9";
+	MATData <= x"4102803a";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"3fa8c3df";
+	MATData <= x"3fcad588";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"40dbd4cd";
+	MATData <= x"40daddd9";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"4101b71e";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"40ca9f5c";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"403afa30";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"411ee1b4";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"00000000";
+	MATData <= x"410acfcb";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"408d0956";
+	MATData <= x"40d01c56";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"4106b3af";
+	MATData <= x"410bf2d8";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"40527488";
+	MATData <= x"40b72f2c";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"40be4643";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"3f970701";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"411cbe3b";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"411a9e6c";
-
-	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"4102ce2c";
+	MATData <= x"40be09ae";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"409ef6e8";
+	MATData <= x"40d03f71";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"403a1f13";
+	MATData <= x"4107d55a";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"40965c18";
+	MATData <= x"3faf26ee";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"40696a1c";
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40ea641a";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"4106629a";
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40961dd7";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"3fbbe00e";
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40ee26af";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
 	MATData <= x"00000000";
 
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"3fd1e298";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"40db2186";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"4108aa71";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"40b7f4a4";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"3f808d33";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"3fe00bbe";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"3f81acc1";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"407f5fa8";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40c5ef2d";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"403e9138";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40e5f33e";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
+	MATData <= x"40efa902";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
+	MATData <= x"4113d582";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
+	MATData <= x"41112367";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
+	MATData <= x"00000000";
 --------write vector
 wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
@@ -335,32 +336,631 @@ wait for CLK_period;
 	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
 	MATData <= x"3f800000";
 wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
 	MATData <= x"3f800000";
 wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
 	MATData <= x"3f800000";
 wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
 	MATData <= x"3f800000";
 wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
 	MATData <= x"3f800000";
 -------write vector
 
-
-
-
 	wait for CLK_period;
-	WEBRAM <= '0';
-	ConfigSTATE <= idel;
-	START <= '1';	
+	WRBRAM <= '0';
+	ConfigSTATE <= idle;	
 	wait for CLK_period;
-	START <= '0';
+	ConfigSTATE <= QR_init;
+	
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fe5a535";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e3dc4b3";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fbb3879";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3eb15f94";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f9ddf62";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd88f3b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ff85f2f";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f9bb481";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f0674e6";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f914c4d";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fa74e8b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e330255";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fafe9be";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3eaf6e5a";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f720fdb";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f91c419";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f8c8e54";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f1bbd49";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ff760bf";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ff4dce9";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f5c7a94";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ed44bbc";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3feb82cf";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e062a41";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd105cb";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f11affe";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fe723f2";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e6dbc0b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ffe6f1a";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fb3d4c5";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f8d0444";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd8ae1b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ebffd01";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f333b3c";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ff48728";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e0f67a3";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f59302e";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f2148fb";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e8498e2";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fa1ecd9";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fcf3c1b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f9d70f8";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fa299a0";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f56680d";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f9f4cd5";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3eeb9aaa";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ea93b6b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ed3394d";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f47eadf";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f710d43";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f99c982";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f56e543";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f427764";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fb39b85";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e39c14b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ff3cadc";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e678a30";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f0c5f9e";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e8a5377";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd91f7e";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f248abd";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3dcda390";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fb53798";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f7373ed";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd49592";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f9c3292";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd4fd1a";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f8e086b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f4787b6";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f26420e";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3edb7fb8";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3efe9d54";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ebd090a";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e2daaf1";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fe3cdc3";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f37d48d";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f85d101";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fd85bf5";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fb8cddb";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f2a5ba1";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fc3a7da";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f71d3d8";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3e7a5b30";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fe9631b";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fc69ff0";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ee28e04";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f489cf1";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f7e694c";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3ef8b63f";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f396f17";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f8b49ab";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3dcfee84";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fc866dd";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3faa4ead";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fbb306a";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fee6cfd";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f18a172";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f783507";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3f71a3e3";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	wait for 2*CLK_period;
+	NEW_QR_RDY <= '1';
+	QR <= x"3fb63152";
+	wait for CLK_period;
+	NEW_QR_RDY <= '0';
+
+	ConfigSTATE <= running;
+
 
 	wait;
 end process;

@@ -32,15 +32,16 @@ use ADMM_lib.ADMM_pkg.all;
 --use UNISIM.VComponents.all;
 
 entity SATURATION is
-    Port ( CLK : in  STD_LOGIC;
-           RST : in  STD_LOGIC;
-           RV : in  STD_LOGIC_VECTOR (31 downto 0);
-           BOX : in  STD_LOGIC_VECTOR (31 downto 0);
-           RV_RDY : in  STD_LOGIC;--DONE signal from RELAXATION
-           BOX_REQUEST : out  STD_LOGIC;
-					 V_IN : in STD_LOGIC_VECTOR(31 downto 0);
-           SAT_DONE : out  STD_LOGIC;
-           NEWZ : out  STD_LOGIC_VECTOR (31 downto 0));
+	Port ( 
+		CLK : in  STD_LOGIC;
+		RST : in  STD_LOGIC;
+		RV : in  STD_LOGIC_VECTOR (31 downto 0);
+		BOX : in  STD_LOGIC_VECTOR (31 downto 0);
+		RV_RDY : in  STD_LOGIC;--DONE signal from RELAXATION
+		BOX_REQUEST : out  STD_LOGIC;
+		V_IN : in STD_LOGIC_VECTOR(31 downto 0);
+		SAT_DONE : out  STD_LOGIC;
+		NEWZ : out  STD_LOGIC_VECTOR (31 downto 0));
 end SATURATION;
 
 architecture Behavioral of SATURATION is
@@ -53,6 +54,8 @@ signal m_axis_result_tdata : std_logic_vector(7 downto 0);
 type signal_dly_type is array (0 to COMPARATOR_LATENCY-1) of std_logic_vector(31 downto 0);
 signal BOX_dly : signal_dly_type;
 signal result_dly : signal_dly_type;
+signal absResult : std_logic_vector(31 downto 0);
+
 
 --signal debug : std_logic_vector(31 downto 0);--for debug box signal
 
@@ -66,7 +69,8 @@ begin
 		else
 --			debug <= BOX;--debug
 			if(isBig='1')then
-				NEWZ_reg <= BOX_dly(COMPARATOR_LATENCY-1);
+				NEWZ_reg(30 downto 0) <= BOX_dly(COMPARATOR_LATENCY-1)(30 downto 0);
+				NEWZ_reg(31) <= result_dly(COMPARATOR_LATENCY-1)(31);
 			else
 				NEWZ_reg <= result_dly(COMPARATOR_LATENCY-1);
 			end if;
@@ -96,6 +100,7 @@ end process;
 NEWZ <= NEWZ_reg;
 isBig <= m_axis_result_tdata(0);
 
+
 SatDone_signal : signal_dly
     Generic map( LATENCY => ADDER_LATENCY+COMPARATOR_LATENCY+1)
 		Port map(CLK,RST,RV_RDY,SAT_DONE);	
@@ -105,13 +110,15 @@ BOXREQUEST_signal : signal_dly
 		Port map(CLK,RST,RV_RDY,BOX_REQUEST);	--box constraint with out0 ready, address start counting after request		
 
 Uadd : add--minus
-  PORT MAP (
-    a => RV,
-    b => V_IN,
-    clk => CLK,
-    isMinus => '1',
-    result => result
+	PORT MAP (
+		a => RV,
+		b => V_IN,
+		clk => CLK,
+		isMinus => '1',
+		result => result
   );
+
+absResult <= '0'&result(30 downto 0);
 
 --Ucmp : CMP
 --  PORT MAP (
@@ -125,14 +132,14 @@ Uadd : add--minus
 --  );
 
 Ucmp : CMP
-  PORT MAP (
-    aclk => CLK,
-    s_axis_a_tvalid => '1',
-    s_axis_a_tdata => result,
-    s_axis_b_tvalid => '1',
-    s_axis_b_tdata => BOX,
-    m_axis_result_tvalid => m_axis_result_tvalid,
-    m_axis_result_tdata => m_axis_result_tdata
+	PORT MAP (
+		aclk => CLK,
+		s_axis_a_tvalid => '1',
+		s_axis_a_tdata => absResult,
+		s_axis_b_tvalid => '1',
+		s_axis_b_tdata => BOX,
+		m_axis_result_tvalid => m_axis_result_tvalid,
+		m_axis_result_tdata => m_axis_result_tdata
   );
 
 	

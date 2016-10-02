@@ -38,21 +38,20 @@ entity ADMM_TOP is
 		RST : in  STD_LOGIC;
 		NumBRAM : in STD_LOGIC_VECTOR(31 downto 0);
 		ADDRBRAM : in STD_LOGIC_VECTOR(31 downto 0);
-		WEBRAM : in STD_LOGIC;
+		WRBRAM : in STD_LOGIC;
 		MATData : in STD_LOGIC_VECTOR(31 downto 0);
 		ConfigSTATE : in state_type;
---		START : in STD_LOGIC;--start computation signal, after BRAMInit state
 		RHO : in STD_LOGIC_VECTOR(31 downto 0);
 		ALPHA : in STD_LOGIC_VECTOR(31 downto 0);
 		ONEMINUSALPHA : in STD_LOGIC_VECTOR(31 downto 0);
 		U : out Mby32_type;
 		STATE_RD : out STD_LOGIC;
 		X : in STD_LOGIC_VECTOR(31 downto 0);--signal from sensor, serial input(x0,x1,...xN)
+		QR : in STD_LOGIC_VECTOR(31 downto 0);
+		NEW_QR_RDY : in STD_LOGIC;
 --below signal for simulation
 		BOX : in STD_LOGIC_VECTOR(31 downto 0);
-		BOX_REQUEST : out STD_LOGIC;
-		QR : in STD_LOGIC_VECTOR(31 downto 0);
-		NEW_QR_RDY : in STD_LOGIC
+		BOX_REQUEST : out STD_LOGIC
 );
 end ADMM_TOP;
 
@@ -101,7 +100,7 @@ COMPONENT BRAM_WRAPPER IS
 		RST : in STD_LOGIC;
 		ConfigSTATE : in state_type;
 		NumBRAM : in STD_LOGIC_VECTOR(31 downto 0);
-		WEBRAM : in STD_LOGIC;
+		WRBRAM : in STD_LOGIC;
 		MATData : in STD_LOGIC_VECTOR(31 downto 0);
 		ADDR : in STD_LOGIC_VECTOR(TOPBRAMADDR_WIDTH-1 downto 0);
 		V_IN : in STD_LOGIC_VECTOR (31 downto 0);		
@@ -255,7 +254,7 @@ UBRAM_WRAPPER : BRAM_WRAPPER
 		RST => RST,
 		ConfigSTATE => ConfigSTATE,
 		NumBRAM => NumBRAM,
-		WEBRAM => WEBRAM,
+		WRBRAM => WRBRAM,
 		MATData => MATData,
 		ADDR => ADDRBRAM(TOPBRAMADDR_WIDTH-1 downto 0),
 		V_IN => F_signal_mux,

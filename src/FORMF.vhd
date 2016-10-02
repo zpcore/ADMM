@@ -210,7 +210,7 @@ Uadd2 : add
 		a => result2,
 		b => fifoB_dout,
 		clk => CLK,
-		isMinus => '0',
+		isMinus => '1',
 		result => F
   );	
 

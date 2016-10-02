@@ -39,7 +39,7 @@ entity BRAM_WRAPPER is
 		RST : in STD_LOGIC;
 		ConfigSTATE : in state_type;
 		NumBRAM : in STD_LOGIC_VECTOR(31 downto 0);
-		WEBRAM : in STD_LOGIC;
+		WRBRAM : in STD_LOGIC;
 		MATData : in STD_LOGIC_VECTOR(31 downto 0);
 		ADDR : in STD_LOGIC_VECTOR(TOPBRAMADDR_WIDTH-1 downto 0);
 		V_IN : in STD_LOGIC_VECTOR (31 downto 0);		
@@ -82,32 +82,33 @@ signal fifo_rd_dly : std_logic;
 signal fifo_rd : std_logic;
 signal fifo_out : std_logic_vector(31 downto 0);
 signal stateWrComplete : std_logic;
-
+signal WRBRAM_ONECLK : std_logic;
+signal WRBRAM_dly : std_logic;
 
 --simulation signal
-signal dataInput_sim0 : std_logic_vector(31 downto 0);
-signal dataInput_sim1 : std_logic_vector(31 downto 0);
-signal dataInput_sim2 : std_logic_vector(31 downto 0);
-signal dataInput_sim3 : std_logic_vector(31 downto 0);
-signal dataInput_sim4 : std_logic_vector(31 downto 0);
-signal dataInput_sim5 : std_logic_vector(31 downto 0);
-signal dataInput_sim6 : std_logic_vector(31 downto 0);
-signal dataInput_sim7 : std_logic_vector(31 downto 0);
-signal dataInput_sig : K2by32_type;
+--signal dataInput_sim0 : std_logic_vector(31 downto 0);
+--signal dataInput_sim1 : std_logic_vector(31 downto 0);
+--signal dataInput_sim2 : std_logic_vector(31 downto 0);
+--signal dataInput_sim3 : std_logic_vector(31 downto 0);
+--signal dataInput_sim4 : std_logic_vector(31 downto 0);
+--signal dataInput_sim5 : std_logic_vector(31 downto 0);
+--signal dataInput_sim6 : std_logic_vector(31 downto 0);
+--signal dataInput_sim7 : std_logic_vector(31 downto 0);
+--signal dataInput_sig : K2by32_type;
 
 
 
 begin
 
-dataInput_sim0 <= dataInput_sig(0,0);
-dataInput_sim1 <= dataInput_sig(1,0);
-dataInput_sim2 <= dataInput_sig(2,0);
-dataInput_sim3 <= dataInput_sig(3,0);
-dataInput_sim4 <= dataInput_sig(0,1);
-dataInput_sim5 <= dataInput_sig(1,1);
-dataInput_sim6 <= dataInput_sig(2,1);
-dataInput_sim7 <= dataInput_sig(3,1);
-dataInput <= dataInput_sig;
+--dataInput_sim0 <= dataInput_sig(0,0);
+--dataInput_sim1 <= dataInput_sig(1,0);
+--dataInput_sim2 <= dataInput_sig(2,0);
+--dataInput_sim3 <= dataInput_sig(3,0);
+--dataInput_sim4 <= dataInput_sig(0,1);
+--dataInput_sim5 <= dataInput_sig(1,1);
+--dataInput_sim6 <= dataInput_sig(2,1);
+--dataInput_sim7 <= dataInput_sig(3,1);
+--dataInput <= dataInput_sig;
 
 
 
@@ -279,12 +280,16 @@ begin
 end process;
 
 dataOutputRdy_Delay : signal_dly
+	Generic map( LATENCY => 1)
+	Port map(CLK,RST,dataOutput_st,dataOutputRdy);
+
+WRBRAM_Delay : signal_dly
     Generic map( LATENCY => 1)
-		Port map(CLK,RST,dataOutput_st,dataOutputRdy);
+	Port map(CLK,RST,WRBRAM,WRBRAM_dly);
 
 Rdy_Delay : signal_dly
     Generic map( LATENCY => 1)
-		Port map(CLK,RST,fifo_rd,fifo_rd_dly);
+	Port map(CLK,RST,fifo_rd,fifo_rd_dly);
 
 F_signal_dly : signal_dly
 	Generic map( LATENCY => 1)
@@ -293,9 +298,10 @@ F_signal_dly : signal_dly
 systemState_rd <= systemState_rd_signal when unsigned(iterationCount)= 0 else '0';
 
 weaHold: for I in 0 to K-1 generate
-	wea(I) <= "1" when (WEBRAM = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
+	wea(I) <= "1" when (WRBRAM_ONECLK = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
 end generate weaHold;
 
+WRBRAM_ONECLK <= (WRBRAM xor WRBRAM_dly) and WRBRAM;
 
 webHold: for I in 0 to K-1 generate
 	web(I) <= "1" when ((fifo_rd_dly = '1' or (systemState_rd_signal_dly ='1' and unsigned(iterationCount)= 0)) and unsigned(BRAMCount) = I) else "0";
@@ -315,12 +321,14 @@ for I in 0 to K-1 generate
 			wea => wea(I),
 			addra => addra,
 			dina => MATData,
-			douta => dataInput_sig(I,0),
+--			douta => dataInput_sig(I,0),
+			douta => dataInput(I,0),
 			clkb => CLK,
 			web => web(I),
 			addrb => addrb,
 			dinb => F_signal,
-			doutb => dataInput_sig(I,1)
+--			doutb => dataInput_sig(I,1)
+			doutb => dataInput(I,1)
 		);
 end generate Gen_MVMBRAM;
 
