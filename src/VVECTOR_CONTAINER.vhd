@@ -92,13 +92,13 @@ begin
 --		else
 --			if(START_ADD_ADDRESS='1')then
 --				addrb <= std_logic_vector(unsigned(addrb)+1);
---				if(unsigned(addrb)=S1-1)then
+--				if(unsigned(addrb)=ROW-1)then
 --					addrb <= (others=>'0');
 --				end if;
 --			end if;
 --			if(VIN_RDY='1')then
 --				addra <= std_logic_vector(unsigned(addra)+1);
---				if(unsigned(addra)=S1-1)then
+--				if(unsigned(addra)=ROW-1)then
 --					addra <= (others=>'0');
 --				end if;
 --			end if;
@@ -116,13 +116,13 @@ begin
 		else
 			if(START_ADD_ADDRESS='1')then
 				addrb <= std_logic_vector(unsigned(addrb)+1);
-				if(unsigned(addrb)=S1)then
+				if(unsigned(addrb)=ROW)then
 					addrb <= std_logic_vector(to_unsigned(1,addrb' length));
 				end if;
 			end if;
 			if(VIN_RDY='1')then
 				addra <= std_logic_vector(unsigned(addra)+1);
-				if(unsigned(addra)=S1)then
+				if(unsigned(addra)=ROW)then
 					addra <= std_logic_vector(to_unsigned(1,addra' length));
 				end if;
 			end if;

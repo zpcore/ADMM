@@ -68,6 +68,11 @@ signal wr_control : std_logic;
 signal switchFIFO : std_logic;
 signal QR_RDY_dly : std_logic;
 signal storeCount : std_logic_vector(13 downto 0);
+signal mergeZeroState : std_logic;
+signal QR_merge0 : std_logic_vector(31 downto 0);
+signal FIFO_B_RD : std_logic;
+signal fectchFIFOACount : std_logic_vector(13 downto 0);
+signal mergeZeroState_dly : std_logic;
 
 begin
 
@@ -101,7 +106,7 @@ begin
 			when initA =>
 				if(ConfigSTATE=running)then
 					ns_ctrl <= running;
-				end if;
+				end if;			
 			when others =>
 		end case;
 	end if;
@@ -118,9 +123,12 @@ begin
 			FIFO_A_rd <= '0';
 			switchFIFO <= '0';
 			storeCount <= (others=>'0');
+			mergeZeroState <= '0';
+			fectchFIFOACount <= (others=>'0');
+			mergeZeroState_dly <= '0';
 		else
 			FIFO_B_wr_reg <= '0';
-			FIFO_A_rd <= '0';
+			mergeZeroState_dly <= mergeZeroState;
 			if(ps_ctrl=initB)then
 				if(switchFIFO='1')then
 					switchFIFO <= '0';
@@ -129,28 +137,50 @@ begin
 					if(wr_control='1')then
 						storeCount <= std_logic_vector(unsigned(storeCount)+1);
 					end if;
-					if(unsigned(storeCount)=S1-1 and wr_control='1')then
+					if(unsigned(storeCount)=(Hp+1)*N-1 and wr_control='1')then--store (Hp+1)*N QR
 						switchFIFO <= '1';
 					end if;
 				end if;
 			elsif(ps_ctrl=running)then
 				if(TRAJ_REQUEST='1')then
 					vecCount <= std_logic_vector(unsigned(vecCount)+1);	
-					if(unsigned(vecCount)/=0 or unsigned(loopCount)/=S1-1)then
-						FIFO_B_wr_reg <= '1';
+					if(unsigned(vecCount)>=N or unsigned(loopCount)/=FIXED_ITERATION-1)then--drop N points during the last iteration
+						if(mergeZeroState='0')then
+							FIFO_B_wr_reg <= '1';
+						end if;
 					end if;
-					if(unsigned(vecCount)=S1-1)then
+
+					if(unsigned(vecCount)=(Hp+1)*N-1)then						
+						mergeZeroState <= '1';
+					end if;
+
+					if(unsigned(vecCount)=(Hp+1)*N )then						
+						FIFO_B_wr_reg <= '0';
+					end if;
+
+					if(unsigned(vecCount)=ROW-1)then						
+						mergeZeroState <= '0';
 						vecCount <= (others => '0');
 						loopCount <= std_logic_vector(unsigned(loopCount)+1);
-						if(unsigned(loopCount)=FIXED_ITERATION-1 and unsigned(vecCount)=S1-1)then
-							loopCount <= (others=>'0');
-							FIFO_A_rd <= '1';
+					end if;
+
+					if(unsigned(loopCount)=FIXED_ITERATION-1)then
+						if(unsigned(vecCount)=(Hp+1)*N-1)then						
+							FIFO_A_rd <= '1';--read 
+						end if;
+						if(unsigned(vecCount)=ROW-1)then
+							loopCount <= (others=>'0');						
 						end if;
 					end if;
 				end if;
 
-				if(FIFO_A_rd='1')then
+				if(FIFO_A_rd='1')then--last the read signal for N clock cycles
 					FIFO_B_wr_reg <= '1';
+					fectchFIFOACount <= std_logic_vector(unsigned(fectchFIFOACount)+1);
+					if(unsigned(fectchFIFOACount)=N-1)then						
+						FIFO_A_rd <= '0'; 
+						fectchFIFOACount <= (others=>'0');
+					end if;
 				end if;
 
 			end if;
@@ -187,6 +217,9 @@ fifoB_input <= QR when ps_ctrl=initB else
 
 FIFO_B_wr <= wr_control when ps_ctrl=initB else FIFO_B_wr_reg; 
 	
+QR_merge0 <= fifoB_dout when mergeZeroState_dly='0' else (others => '0');
+
+FIFO_B_RD <= traj_request when mergeZeroState='0' else '0';
 
 Uadd1 : add
 	PORT MAP (
@@ -208,7 +241,7 @@ Umul : mul
 Uadd2 : add
 	PORT MAP (
 		a => result2,
-		b => fifoB_dout,
+		b => QR_merge0,
 		clk => CLK,
 		isMinus => '1',
 		result => F
@@ -220,7 +253,7 @@ UfifoB : fifo_vector--fifo for current trajectory
 		srst => RST,
 		din => fifoB_input,
 		wr_en => FIFO_B_wr,
-		rd_en => traj_request,
+		rd_en => FIFO_B_RD,
 		dout => fifoB_dout
 --		full => full,
 --		empty => empty

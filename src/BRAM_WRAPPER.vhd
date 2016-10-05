@@ -200,7 +200,7 @@ begin
 						end if;
 					end if;
 							
-					if(unsigned(vecCount)=S2-N)then
+					if(unsigned(vecCount)=COL-N)then
 						vectorComplete <= '1';
 						vecCount <= (others => '0');	
 					end if;
@@ -259,7 +259,7 @@ begin
 					output_loopCount<=(others=>'0');
 				else				
 					output_loopCount <= std_logic_vector(unsigned(output_loopCount)+1);
-					if(unsigned(addra_output)=(S1*BRAMLOOP-1))then--complete output
+					if(unsigned(addra_output)=(ROW*BRAMLOOP-1))then--complete output
 						dataOutput_st <= '0';
 						REDUCE <= '0';
 						output_complete <= '1';
@@ -297,8 +297,11 @@ F_signal_dly : signal_dly
 
 systemState_rd <= systemState_rd_signal when unsigned(iterationCount)= 0 else '0';
 
-weaHold: for I in 0 to K-1 generate
-	wea(I) <= "1" when (WRBRAM_ONECLK = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
+--weaHold: for I in 0 to K-1 generate--for simulation
+--	wea(I) <= "1" when (WRBRAM_ONECLK = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
+--end generate weaHold;
+weaHold: for I in 0 to K-1 generate--for implementation
+	wea(I) <= "1" when (WRBRAM = '1' and unsigned(NumBRAM) = I and ConfigSTATE=BRAM_init) else "0";
 end generate weaHold;
 
 WRBRAM_ONECLK <= (WRBRAM xor WRBRAM_dly) and WRBRAM;

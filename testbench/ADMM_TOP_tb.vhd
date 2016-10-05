@@ -119,205 +119,730 @@ begin
 	ConfigSTATE <= BRAM_init;
 
 	wait for CLK_period;
-	WRBRAM <= '1';
+	WRBRAM <= '1';	
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"4085f20e";
+	MATData <= x"40df4100";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"3fe025a0";
+	MATData <= x"40d5e815";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"410fc3a8";
+	MATData <= x"40232522";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
-	MATData <= x"40ee0af0";
+	MATData <= x"40bc84ec";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"404611fd";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"40987416";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"40f1ed2e";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"402a178d";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"407a9e7b";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"409f8274";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"40e4d0c7";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(0,ADDRBRAM'length));
+	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"406a8bcb";
+	MATData <= x"3ff2dfa4";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"41149a27";
+	MATData <= x"410bf268";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
-	MATData <= x"40889e70";
+	MATData <= x"411f1464";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"3ffcceee";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"41113972";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"402be3b8";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"41180aa8";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"411af26f";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"408ce91c";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"3ff91347";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"40b1dd29";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(1,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"4102803a";
+	MATData <= x"406a12c4";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"3fcad588";
+	MATData <= x"40e08c1b";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"40daddd9";
+	MATData <= x"40ffd7a1";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
-	MATData <= x"410acfcb";
+	MATData <= x"40ace62e";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"40acc4ca";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"40c6ccbf";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"40c9901b";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"40fe58a0";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"3fb0dc87";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"40a1d855";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"4118babd";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2,ADDRBRAM'length));
+	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"40d01c56";
+	MATData <= x"40fda35a";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"410bf2d8";
+	MATData <= x"3f9684f9";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
-	MATData <= x"40b72f2c";
+	MATData <= x"4117b00b";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"3f972ee8";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"411a0545";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"411b98aa";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"40687c87";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"4074175f";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"4077b975";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"409d8a33";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"40b9cb4a";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(3,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"40be09ae";
+	MATData <= x"409b7665";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"40d03f71";
+	MATData <= x"409c29ae";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"4107d55a";
+	MATData <= x"40a2c590";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
-	MATData <= x"3faf26ee";
+	MATData <= x"40ec155e";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"410f2af7";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"4069db2d";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"41040c95";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"4095d775";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"408ba13b";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"41128670";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"3fd5ee91";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(4,ADDRBRAM'length));
+	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
-	MATData <= x"40ea641a";
+	MATData <= x"410d45f2";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
-	MATData <= x"40961dd7";
+	MATData <= x"404d94b2";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
-	MATData <= x"40ee26af";
+	MATData <= x"3fccbe3f";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40a2360c";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"3ff49b11";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"3fb159a7";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40bebbdb";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"40d9ada1";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"3fafd027";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"3fcd8fbd";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"410f94ab";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(5,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
-	MATData <= x"3fd1e298";
+	MATData <= x"410bebb8";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
-	MATData <= x"40db2186";
+	MATData <= x"40c5943a";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
-	MATData <= x"4108aa71";
+	MATData <= x"4022f48a";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
-	MATData <= x"40b7f4a4";
+	MATData <= x"40af6872";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"405f4cd0";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"4088e4c6";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"40a0acf9";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"40d7e196";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"410aab3a";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"40ce8ac9";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"410acbf3";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(6,ADDRBRAM'length));
+	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
-	MATData <= x"3f808d33";
+	MATData <= x"4014c8f2";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
-	MATData <= x"3fe00bbe";
+	MATData <= x"408c02f8";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
-	MATData <= x"3f81acc1";
+	MATData <= x"40eb8e24";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"4114acb9";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"407c42c8";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"4081a36c";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"4006bae1";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"411ff8cc";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"40e29f85";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"40aa512e";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"40d44e18";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(7,ADDRBRAM'length));
 	MATData <= x"00000000";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
-	MATData <= x"407f5fa8";
+	MATData <= x"3ff7f6aa";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
-	MATData <= x"40c5ef2d";
+	MATData <= x"40db7cf6";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
-	MATData <= x"403e9138";
+	MATData <= x"40901094";
 
 	wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
-	MATData <= x"40e5f33e";
+	MATData <= x"40b67bb4";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
-	MATData <= x"40efa902";
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"3fc6796e";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(1, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
-	MATData <= x"4113d582";
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40f68616";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(2, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
-	MATData <= x"41112367";
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"408bd841";
 
 	wait for CLK_period;
-	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
-	ADDRBRAM <= std_logic_vector(to_unsigned(9,ADDRBRAM'length));
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40debf64";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"409ef758";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40ceb79d";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"40b00908";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
 	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(8,ADDRBRAM'length));
+	MATData <= x"00000000";
+
+
+
+
+
 --------write vector
 wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
@@ -335,6 +860,56 @@ wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
 	MATData <= x"3f800000";
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+	
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(8, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(9, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(10, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(11, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+	wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(12, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(13, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(14, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(15, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2016,ADDRBRAM'length));
+	MATData <= x"3f800000";
+	
 wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(0, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
@@ -349,6 +924,22 @@ wait for CLK_period;
 	MATData <= x"3f800000";
 wait for CLK_period;
 	NumBRAM <= std_logic_vector(to_unsigned(3, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(4, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(5, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(6, NumBRAM'length));
+	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
+	MATData <= x"3f800000";
+wait for CLK_period;
+	NumBRAM <= std_logic_vector(to_unsigned(7, NumBRAM'length));
 	ADDRBRAM <= std_logic_vector(to_unsigned(2017,ADDRBRAM'length));
 	MATData <= x"3f800000";
 -------write vector
